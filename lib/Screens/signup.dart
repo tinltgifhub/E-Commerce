@@ -34,35 +34,97 @@ class SignUp extends StatelessWidget {
             Expanded(
               flex: 50,
               child: Container(
-                color: Colors.green,
-                // margin: EdgeInsets.symmetric(horizontal:scrwidth*0.03),
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Username",
-                        suffixIcon:GestureDetector(
-                          onTap: (){
-                            FocusScope.of(context).unfocus();
-                          },
-                          child:Icon(Icons.visibility),
+                color: Colors.white,
+                margin: EdgeInsets.symmetric(horizontal:scrwidth*0.03),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Username",
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black, width: 2.4),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          // ),
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(style: BorderStyle.solid,color: Colors.red),
-                        ),         
                       ),
-                    )
-                  ],
+                      SizedBox(height: scrheight*0.03,),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Email",
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black, width: 2.4),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          // ),
+                        ),
+                      ),
+                      SizedBox(height: scrheight*0.03,),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Password",
+                          suffixIcon:GestureDetector(
+                            onTap: (){
+                              FocusScope.of(context).unfocus();
+                            },
+                            child:Icon(Icons.visibility),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black, width: 2.4),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          // ),
+                        ),
+                      ),
+                      SizedBox(height: scrheight*0.03,),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Phone Number",
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.black, width: 2.4),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          // ),
+                        ),
+                      ),
+                      SizedBox(height: scrheight*0.01,),
+                      Container(
+                        child: ElevatedButton(
+                          onPressed: (){}, 
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(Size(scrwidth*0.4,scrheight*0.06)),
+                          ),
+                          child: Text(
+                            'Register',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          ),
+                      ),
+                      SizedBox(height: scrheight*0.02,),
+                      Row(
+                        children:[
+                          Text('I Have Already An Account! ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+                          GestureDetector(
+                            onTap: (){},
+                            child: Text(
+                              'Login',
+                              style: TextStyle(color: Colors.blue,fontSize: 15,fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                        ] ,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            Expanded(
-              flex: 20,
-              child: Container(
-                color: Colors.blue,
-              ),
-            ),
+            // Expanded(
+            //   // flex: 10,
+            //   child: Container(
+            //     color: Colors.white,
+            //   ),
+            // ),
           ],
         ),
       ),
