@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -20,10 +18,8 @@ bool obserText=true;
 class _SignUpState extends State<SignUp> {
   void validation(){
     final FormState? _form = _formKey.currentState;
-    if(_form!=null && _form.validate()){
-      print('yes');
-    }else{
-      print('no');
+    if(_form!=null){
+      _form.validate();
     }
   }
   @override
