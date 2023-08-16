@@ -1,4 +1,11 @@
+import 'package:ecommerce/Screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -15,11 +22,36 @@ RegExp regExp_phone = new RegExp(phone_p);
 
 bool obserText=true; 
 
+
+TextEditingController _emailController = TextEditingController();
+TextEditingController _passwordController = TextEditingController();
+TextEditingController _phoneController = TextEditingController();
+TextEditingController _usernameController = TextEditingController();
+
+
+
+void addData(String username, String email,String password, String phoneNumber) async {
+  DatabaseReference _ref = FirebaseDatabase.instance.reference().child('users');
+  Map<String, dynamic> userData = {
+    'username': username,
+    'email': email,
+    'password':password,
+    'phone': phoneNumber,
+  };
+  await _ref.push().set(userData);
+}
+
 class _SignUpState extends State<SignUp> {
-  void validation(){
+
+  void validation() async {
     final FormState? _form = _formKey.currentState;
-    if(_form!=null){
-      _form.validate();
+    
+    if(_form!=null && _form.validate()){
+      try{
+        // UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      }on PlatformException catch(e){
+        print(e.message.toString());
+      }
     }
   }
   @override
@@ -61,6 +93,7 @@ class _SignUpState extends State<SignUp> {
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: _usernameController,
                           validator: (value){
                             if(value!=null){
                               if(value.isEmpty){
@@ -70,7 +103,7 @@ class _SignUpState extends State<SignUp> {
                                 return 'Too Short!(>6 pls)';
                               }
                             }
-                            return '';
+                            return null;
                           },
                           decoration: InputDecoration(
                             hintText: "Username",
@@ -83,6 +116,7 @@ class _SignUpState extends State<SignUp> {
                         ),
                         SizedBox(height: scrheight*0.03,),
                         TextFormField(
+                          controller: _emailController,
                           validator: (value){
                             if(value!=null){
                               if(!regExp_email.hasMatch(value)){
@@ -92,7 +126,7 @@ class _SignUpState extends State<SignUp> {
                                 return "Email cannot be empty!";
                               }                             
                             }
-                            return "";
+                            return null;
                           },
                           decoration: InputDecoration(
                             hintText: "Email",
@@ -106,6 +140,7 @@ class _SignUpState extends State<SignUp> {
                         SizedBox(height: scrheight*0.03,),
                         TextFormField(
                           obscureText: obserText,
+                          controller: _passwordController,
                           validator: (value) {
                             if(value!=null){
                               if(value.isEmpty){
@@ -115,7 +150,7 @@ class _SignUpState extends State<SignUp> {
                                 return "Too Short!(>8 pls)";
                               }                             
                             }
-                            return "";
+                            return null;
                           },
                           decoration: InputDecoration(
                             hintText: "Password",
@@ -136,6 +171,7 @@ class _SignUpState extends State<SignUp> {
                         ),
                         SizedBox(height: scrheight*0.03,),
                         TextFormField(
+                          controller: _phoneController,
                           validator: (value) {
                             if(value!=null){
                               if(value.isEmpty){
@@ -145,7 +181,7 @@ class _SignUpState extends State<SignUp> {
                                 return "Phone number is invalid(requires 10)";
                               }
                             }
-                            return "";
+                            return null;
                           },
                           decoration: InputDecoration(
                             hintText: "Phone Number",
@@ -159,7 +195,15 @@ class _SignUpState extends State<SignUp> {
                         SizedBox(height: scrheight*0.01,),
                         Container(
                           child: ElevatedButton(
-                            onPressed: validation, 
+                            onPressed: validation,
+                            // onPressed:(){
+                            //   addData(
+                            //     _usernameController.text,
+                            //     _emailController.text,
+                            //     _passwordController.text,
+                            //     _phoneController.text
+                            //     );
+                            // },
                             style: ButtonStyle(
                               minimumSize: MaterialStateProperty.all(Size(scrwidth*0.4,scrheight*0.06)),
                             ),
@@ -174,7 +218,9 @@ class _SignUpState extends State<SignUp> {
                           children:[
                             Text('I Have Already An Account! ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
                             GestureDetector(
-                              onTap: (){},
+                              onTap: (){
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>LogIn()));
+                              },
                               child: Text(
                                 'Login',
                                 style: TextStyle(color: Colors.blue,fontSize: 15,fontWeight: FontWeight.w800),
