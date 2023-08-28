@@ -1,4 +1,6 @@
+import 'package:ecommerce/Screens/listproduct.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -8,10 +10,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   
-
-
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  
+  final List<bool> isSelected = [true, false, false, false];
+
+  void handleSelection(int index) {
+      setState(() {
+        for (int i = 0; i < isSelected.length; i++) {
+          isSelected[i] = (i == index); 
+        }
+      });
+    }
+
   @override
   Widget build(BuildContext context) {
     var scrwidth = MediaQuery.of(context).size.width;
@@ -30,12 +39,20 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget _buildTitle(String title){
+    Widget _buildTitle(String title1, String title2){
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('$title',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
-          Text('See all',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+          Text('$title1',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+          GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (ctx)=>ListProduct(name:title1)
+                )
+              );
+            },
+            child: Text('$title2',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),),
+          ),
         ],
       );
     }
@@ -69,15 +86,55 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-
-
+    
     return Scaffold(
       key: _key,
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text('Tinlt',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),), 
+              accountEmail: Text('tinlt@gmail.com', style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w400),),
+              decoration: BoxDecoration(
+                color: Colors.grey[200], 
+              ),
+              currentAccountPicture: CircleAvatar(
+                maxRadius: 45,
+                backgroundImage: AssetImage('images/user.jpg'),
+              ),
+            ),
+            ListTile(
+              selected: isSelected[0],
+              onTap:() => handleSelection(0),    
+              leading: Icon(Icons.home, size: 30,),
+              title: Text("Home",style: TextStyle(fontSize: 17),),
+            ),
+            ListTile(
+              selected: isSelected[1],
+              onTap:() => handleSelection(1),
+              leading: Icon(Icons.shopping_cart, size: 30,),
+              title: Text("Cart",style: TextStyle(fontSize: 17),),
+            ),
+            ListTile(
+              selected: isSelected[2],
+              onTap:() => handleSelection(2),
+              leading: Icon(Icons.info, size: 30,),
+              title: Text("About",style: TextStyle(fontSize: 17),),
+            ),
+            ListTile(
+              selected: isSelected[3],
+              onTap:() => handleSelection(3),
+              leading: Icon(Icons.exit_to_app, size: 30,),
+              title: Text("Log out",style: TextStyle(fontSize: 17),),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Text("Home", style: TextStyle(color: Colors.black),),
         centerTitle: true,
         backgroundColor:  Colors.grey[200], 
-        elevation: 0,
+        elevation: 0.0,
         leading: IconButton(
           onPressed: (){
             _key.currentState?.openDrawer();
@@ -101,49 +158,38 @@ class _HomePageState extends State<HomePage> {
         },
         child: Container(
           color: Colors.white,
-          margin: EdgeInsets.only(top: scrheight*0.01),
+          // margin: EdgeInsets.only(top: scrheight*0.01),
           height: double.infinity,
           width: double.infinity,
           child: ListView(
             children: [
               Container(
                 margin: EdgeInsets.symmetric(horizontal: scrwidth*0.03),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Search Something",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    )
-                  ),
-                ),
-              ),
-              SizedBox(height: scrheight*0.02,),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: scrwidth*0.03),
                 child: Column(
                   children: [
-                    _buildTitle('Featured'),
-                    SizedBox(height: scrheight*0.01,),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          _buildCard(
-                            'images/Áo Sơmi Palewave Densed Stripes.png',
-                            '\$30.0.0', 
-                            'Áo Sơmi Palewave Densed Stripes',
-                          ),
-                          _buildCard(
-                            'images/Áo Sơmi Palewave Densed Stripes.png',
-                            '\$30.0.0', 
-                            'Áo Sơmi Palewave Densed Stripes',
-                          ),
-                        ],
+                    CarouselSlider(
+                      options: CarouselOptions(
+                        height: scrheight*0.25, 
+                        autoPlay: true, 
+                        autoPlayInterval: Duration(seconds: 2), 
+                        autoPlayAnimationDuration: Duration(milliseconds: 800), 
+                        pauseAutoPlayOnTouch: true, 
+                        enlargeCenterPage: true, 
+                        enableInfiniteScroll: true, 
                       ),
+                      items: [
+                        Container(
+                          child: Image(image: AssetImage('images/tie.png')),
+                        ),
+                        Container(
+                          child: Image(image: AssetImage('images/dress.png')),
+                        ),
+                        Container(
+                          child: Image(image: AssetImage('images/sneakers.png')),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: scrheight*0.03,),
-                    _buildTitle("Categorie"),
+                    _buildTitle("Categorie",'View more'),
                     SizedBox(height: scrheight*0.01,),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -163,19 +209,39 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: scrheight*0.03,),
-                    _buildTitle("New Achives"),
+                    _buildTitle('Featured','View more'),
+                    SizedBox(height: scrheight*0.01,),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _buildCard(
+                            'images/product1.png',
+                            '\$30.0.0', 
+                            'Áo Sơmi Palewave Densed Stripes',
+                          ),
+                          _buildCard(
+                            'images/product1.png',
+                            '\$30.0.0', 
+                            'Áo Sơmi Palewave Densed Stripes',
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: scrheight*0.03,),
+                    _buildTitle("New Achives",'See all'),
                     SizedBox(height: scrheight*0.01,),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
                            _buildCard(
-                            'images/Áo Sơmi Palewave Densed Stripes.png',
+                            'images/product1.png',
                             '\$30.0.0', 
                             'Áo Sơmi Palewave Densed Stripes',
                           ),
                           _buildCard(
-                            'images/Áo Sơmi Palewave Densed Stripes.png',
+                            'images/product1.png',
                             '\$30.0.0', 
                             'Áo Sơmi Palewave Densed Stripes',
                           ),
