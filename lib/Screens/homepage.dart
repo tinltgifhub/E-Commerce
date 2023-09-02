@@ -1,3 +1,4 @@
+import 'package:ecommerce/Screens/detail.dart';
 import 'package:ecommerce/Screens/listproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -58,30 +59,38 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget _buildCard(String image, String cost, String name ){
-      return Card(
-        child: Column(
-          children: [
-            Container(
-              width: scrwidth*0.4,
-              height: scrheight*0.2,
-              // color: Colors.red,
-              child: Image(image: AssetImage('$image')),
-            ),
-            Text('$cost',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.lightBlue),),
-            Container(
-              width: scrwidth*0.5,
-              child: Text('$name',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                  
+      return GestureDetector(
+        onTap: (){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx)=>Detail(),
+            )
+          );
+        },
+        child: Card(
+          child: Column(
+            children: [
+              Container(
+                width: scrwidth*0.4,
+                height: scrheight*0.2,
+                // color: Colors.red,
+                child: Image(image: AssetImage('$image')),
+              ),
+              Text('$cost',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.lightBlue),),
+              Container(
+                width: scrwidth*0.5,
+                child: Text('$name',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black,
+                    
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: scrheight*0.03,),
-          ],
+              SizedBox(height: scrheight*0.03,),
+            ],
+          ),
         ),
       );
     }
